@@ -1,0 +1,16 @@
+#server port configuration
+server:
+  port: 9095
+
+#profile configuration
+profiles:
+    active: local
+
+#application name configiration
+spring:
+  application:
+    name: web-bff
+
+#jwt configuration
+jwt:
+   secret : ${JWT_SECRET}

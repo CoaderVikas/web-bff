@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.bff.vikas.feign.dto.AdminUserResponse;
 import com.bff.vikas.feign.dto.LoginRequest;
 import com.bff.vikas.feign.dto.LoginResponse;
 import com.bff.vikas.feign.dto.PasswordResetRequest;
@@ -28,7 +27,7 @@ import com.bff.vikas.feign.fallback.AuthServiceFallback;
  * Version    : 1.0
  */
 
-@FeignClient(name = "AUTH_SERVICE",path = "/rent-hub/auth",fallback =AuthServiceFallback.class )
+@FeignClient(name = "AUTH-SERVICE",path = "/rent-hub/auth",fallback =AuthServiceFallback.class )
 public interface AuthServiceFeignClient {
 	
 	/**

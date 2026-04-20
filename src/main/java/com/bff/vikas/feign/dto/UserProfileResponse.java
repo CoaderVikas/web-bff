@@ -2,6 +2,9 @@ package com.bff.vikas.feign.dto;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +23,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserProfileResponse {
 	// Identity
 	private String fullName;
@@ -32,11 +36,13 @@ public class UserProfileResponse {
 	// Account status
 	private Boolean enabled;
 	private Boolean accountNonLocked;
-
-	// Security info (optional / internal use)
-	private Integer failedLoginAttempts;
-	private LocalDateTime passwordLastUpdatedAt;
 	
 	//for status
 	private String status;
+	
+	// Security info (optional / internal use)
+	@JsonIgnore
+	private Integer failedLoginAttempts;
+	@JsonIgnore
+	private LocalDateTime passwordLastUpdatedAt;
 }

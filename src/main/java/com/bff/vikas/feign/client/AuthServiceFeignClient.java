@@ -16,7 +16,6 @@ import com.bff.vikas.feign.dto.PasswordResetResponse;
 import com.bff.vikas.feign.dto.RegisterRequest;
 import com.bff.vikas.feign.dto.UpdateProfileRequest;
 import com.bff.vikas.feign.dto.UserProfileResponse;
-import com.bff.vikas.feign.fallback.AuthServiceFallback;
 
 
 /**
@@ -27,7 +26,7 @@ import com.bff.vikas.feign.fallback.AuthServiceFallback;
  * Version    : 1.0
  */
 
-@FeignClient(name = "AUTH-SERVICE",path = "/rent-hub/auth",fallback =AuthServiceFallback.class )
+@FeignClient(name = "AUTH-SERVICE",path = "/rent-hub/auth")
 public interface AuthServiceFeignClient {
 	
 	/**

@@ -1,10 +1,10 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '4.0.2'
+	id 'org.springframework.boot' version '3.4.3'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'com..bff.vikas'
+group = 'com.bff.vikas'
 version = '0.0.1-SNAPSHOT'
 description = 'added bff layer '
 
@@ -19,16 +19,22 @@ repositories {
 }
 
 ext {
-	set('springBootAdminVersion', "4.0.0")
-	set('springCloudVersion', "2025.1.0")
+	set('springBootAdminVersion', "3.4.1")
+	set('springCloudVersion', "2024.0.0")
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'de.codecentric:spring-boot-admin-starter-client'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.1'
+	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
 	
 	compileOnly 'org.projectlombok:lombok'
 	

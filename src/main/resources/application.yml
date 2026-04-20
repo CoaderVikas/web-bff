@@ -15,7 +15,7 @@ spring:
 jwt:
    secret : ${JWT_SECRET}
 
-#circuit breaker configuration
+#retry breaker configuration
 resilience4j:
   retry:
     retry-aspect-order: 2
@@ -33,6 +33,7 @@ resilience4j:
 #          - java.lang.RuntimeException
 #          - feign.FeignException
 
+#retry breaker configuration
   circuitbreaker:
     circuit-breaker-aspect-order: 1
     instances:
@@ -48,14 +49,16 @@ resilience4j:
         sliding-window-type: count-based
         slow-call-duration-threshold: 3s
         slow-call-rate-threshold: 80
+
+#actuator configuration
 management:
   endpoints:
     web:
       exposure:
-        include: "health,info,circuitbreakers,retries" # Saare endpoints expose karne ke liye
+        include: "health,info,circuitbreakers,retries" 
   endpoint:
     health:
-      show-details: always # Isse 'CLOSED' status aur details dikhengi
+      show-details: always 
   health:
     circuitbreakers:
-      enabled: true # Circuit breaker ka status health me dikhane ke liye
+      enabled: true 

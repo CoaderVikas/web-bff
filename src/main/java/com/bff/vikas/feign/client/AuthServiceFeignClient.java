@@ -9,13 +9,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.bff.vikas.config.FeignConfig;
 import com.bff.vikas.feign.dto.LoginRequest;
 import com.bff.vikas.feign.dto.LoginResponse;
 import com.bff.vikas.feign.dto.PasswordResetRequest;
 import com.bff.vikas.feign.dto.PasswordResetResponse;
+import com.bff.vikas.feign.dto.RefreshRequest;
 import com.bff.vikas.feign.dto.RegisterRequest;
 import com.bff.vikas.feign.dto.UpdateProfileRequest;
 import com.bff.vikas.feign.dto.UserProfileResponse;
+
+import jakarta.validation.Valid;
+
 
 
 /**
@@ -26,54 +31,105 @@ import com.bff.vikas.feign.dto.UserProfileResponse;
  * Version    : 1.0
  */
 
-@FeignClient(name = "AUTH-SERVICE",path = "/rent-hub/auth")
+@FeignClient(name = "AUTH-SERVICE",path = "/rent-hub/auth",configuration = FeignConfig.class)
 public interface AuthServiceFeignClient {
 	
 	/**
-	 * profile controller API
+	 * 
+	 * @param token
+	 * @return
 	 */
 	@GetMapping("/profile/me")
 	UserProfileResponse getMyProfile(@RequestHeader("Authorization") String token);
 
+	/**
+	 * 
+	 * @param token
+	 * @param request
+	 * @return
+	 */
 	@PutMapping("/profile/me")
 	UserProfileResponse updateProfile(@RequestHeader("Authorization") String token,@RequestBody UpdateProfileRequest request);
 
-	// Forgot Password (OTP generate)
+	/**
+	 * 
+	 * @param username
+	 * @return
+	 */
 	@PostMapping("/password/forgot")
 	String generateOtp(@RequestParam("username") String username);
 
-	// Reset Password
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
 	@PostMapping("/password/reset")
 	PasswordResetResponse resetPassword(@RequestBody PasswordResetRequest request);
 	
-	// Register API
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
 	@PostMapping("/auth/register")
 	LoginResponse register(@RequestBody RegisterRequest request);
 
-	// Login API
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
 	@PostMapping("/auth/login")
 	LoginResponse login(@RequestBody LoginRequest request);
 	
-	// Lock user
+	/**
+	 * 
+	 * @param token
+	 * @param id
+	 * @return
+	 */
 	@PutMapping("/rent-hub/auth/admin/users/{id}/lock")
 	String lockUser(@RequestHeader("Authorization") String token, @PathVariable("id") Long id);
 
-	// Unlock user
+	/**
+	 * 
+	 * @param token
+	 * @param id
+	 * @return
+	 */
 	@PutMapping("/rent-hub/auth/admin/users/{id}/unlock")
 	String unlockUser(@RequestHeader("Authorization") String token, @PathVariable("id") Long id);
 
-	// Enable / Disable user
+	/**
+	 * 
+	 * @param token
+	 * @param id
+	 * @param enabled
+	 * @return
+	 */
 	@PutMapping("/rent-hub/auth/admin/users/{id}/status")
 	String updateUserStatus(@RequestHeader("Authorization") String token, @PathVariable("id") Long id,
 			@RequestParam("enabled") boolean enabled);
 
-	// Update role
+	/**
+	 * 
+	 * @param token
+	 * @param id
+	 * @param role
+	 * @return
+	 */
 	@PutMapping("/rent-hub/auth/admin/users/{id}/role")
 	String updateUserRole(@RequestHeader("Authorization") String token, @PathVariable("id") Long id,
 			@RequestParam("role") String role);
 
-	// Get all users (pagination)
+	/**
+	 * 
+	 */
 	/*@GetMapping("/rent-hub/auth/admin/users")
-	Page<AdminUserResponse> getAllUsers(@RequestHeader("Authorization") String token, @RequestParam("page") int page,
+	/*Page<AdminUserResponse> getAllUsers(@RequestHeader("Authorization") String token, @RequestParam("page") int page,
 			@RequestParam("size") int size);*/
+	
+	@PostMapping("/jwt/logout")
+	public String logout(@RequestHeader("Authorization")String Token,@Valid @RequestBody RefreshRequest request);
 }

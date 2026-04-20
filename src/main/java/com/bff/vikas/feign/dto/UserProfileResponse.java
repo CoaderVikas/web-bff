@@ -45,4 +45,6 @@ public class UserProfileResponse {
 	private Integer failedLoginAttempts;
 	@JsonIgnore
 	private LocalDateTime passwordLastUpdatedAt;
+	
+	private String message;
 }

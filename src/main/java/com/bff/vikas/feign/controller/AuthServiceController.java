@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bff.vikas.feign.dto.ChangePasswordRequest;
+import com.bff.vikas.feign.dto.ChangePasswordResponse;
 import com.bff.vikas.feign.dto.LoginRequest;
 import com.bff.vikas.feign.dto.LoginResponse;
+import com.bff.vikas.feign.dto.PaginatedUserResponse;
 import com.bff.vikas.feign.dto.PasswordResetRequest;
 import com.bff.vikas.feign.dto.PasswordResetResponse;
 import com.bff.vikas.feign.dto.RefreshRequest;
@@ -35,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
  * Version    : 1.0
  */
 @RestController
-@RequestMapping(value = "/api/v1/auth")
+@RequestMapping(value = "/rent-hub/api/v1/auth")
 @AllArgsConstructor
 @Slf4j
 public class AuthServiceController {
@@ -104,7 +107,7 @@ public class AuthServiceController {
 	 * @param request
 	 * @return
 	 */
-	@PostMapping("/reset-password")
+	@PostMapping("/password-reset")
 	public ResponseEntity<PasswordResetResponse> resetPassword(@RequestBody PasswordResetRequest request) {
 		return ResponseEntity.ok(authService.resetPassword(request));
 	}
@@ -115,11 +118,21 @@ public class AuthServiceController {
 	 * @param username
 	 * @return
 	 */
-	@PostMapping("/forgot-password")
+	@PostMapping("/password-forgot")
 	public ResponseEntity<String> generateOtp(@RequestParam("username") String username) {
 		return ResponseEntity.ok(authService.generateOtp(username));
 	}
 	
+	/**
+	 * 
+	 * @param request
+	 * @param authentication
+	 * @return
+	 */
+	@PutMapping("/password-change")
+	public ResponseEntity<ChangePasswordResponse> changePassword(@RequestBody ChangePasswordRequest request,@RequestHeader("Authorization") String token) {
+		return ResponseEntity.ok(authService.changePassword(request, token));
+	}
 	
 	/**
 	 * 
@@ -127,7 +140,7 @@ public class AuthServiceController {
 	 * @param id
 	 * @return
 	 */
-	@PutMapping("/admin/users/{id}/lock")
+	@PutMapping("/users/{id}/lock")
 	public ResponseEntity<String> lockUser(@RequestHeader("Authorization") String token, @PathVariable("id") Long id) {
 		return ResponseEntity.ok(authService.lockUser(token, id));
 	}
@@ -139,10 +152,8 @@ public class AuthServiceController {
 	 * @param id
 	 * @return
 	 */
-	@PutMapping("/admin/users/{id}/unlock")
-	public ResponseEntity<String> unlockUser(@RequestHeader("Authorization") String token,
-			@PathVariable("id") Long id) {
-
+	@PutMapping("/users/{id}/unlock")
+	public ResponseEntity<String> unlockUser(@RequestHeader("Authorization") String token,@PathVariable("id") Long id) {
 		return ResponseEntity.ok(authService.unlockUser(token, id));
 	}
 
@@ -153,9 +164,8 @@ public class AuthServiceController {
 	 * @param enabled
 	 * @return
 	 */
-	@PutMapping("/admin/users/{id}/status")
-	public ResponseEntity<String> updateUserStatus(@RequestHeader("Authorization") String token,
-			@PathVariable("id") Long id, @RequestParam("enabled") boolean enabled) {
+	@PutMapping("/users/{id}/status")
+	public ResponseEntity<String> updateUserStatus(@RequestHeader("Authorization") String token,@PathVariable("id") Long id, @RequestParam("enabled") boolean enabled) {
 		return ResponseEntity.ok(authService.updateUserStatus(token, id, enabled));
 	}
 
@@ -166,10 +176,14 @@ public class AuthServiceController {
 	 * @param role
 	 * @return
 	 */
-	@PutMapping("/admin/users/{id}/role")
-	public ResponseEntity<String> updateUserRole(@RequestHeader("Authorization") String token,
-			@PathVariable("id") Long id, @RequestParam("role") String role) {
+	@PutMapping("/users/{id}/role")
+	public ResponseEntity<String> updateUserRole(@RequestHeader("Authorization") String token,@PathVariable("id") Long id, @RequestParam("role") String role) {
 		return ResponseEntity.ok(authService.updateUserRole(token, id, role));
+	}
+	
+	@GetMapping("/users")
+	public ResponseEntity<PaginatedUserResponse> getAllUsers(@RequestHeader("Authorization") String token,@RequestParam(name = "page", defaultValue = "0") int page,@RequestParam(name = "size", defaultValue = "10") int size) {
+		return ResponseEntity.ok(authService.getAllUsers(token,page, size));
 	}
 
 }

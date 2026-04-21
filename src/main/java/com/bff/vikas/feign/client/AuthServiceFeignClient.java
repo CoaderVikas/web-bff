@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bff.vikas.config.FeignConfig;
+import com.bff.vikas.feign.dto.ChangePasswordRequest;
+import com.bff.vikas.feign.dto.ChangePasswordResponse;
 import com.bff.vikas.feign.dto.LoginRequest;
 import com.bff.vikas.feign.dto.LoginResponse;
+import com.bff.vikas.feign.dto.PaginatedUserResponse;
 import com.bff.vikas.feign.dto.PasswordResetRequest;
 import com.bff.vikas.feign.dto.PasswordResetResponse;
 import com.bff.vikas.feign.dto.RefreshRequest;
@@ -85,11 +88,31 @@ public interface AuthServiceFeignClient {
 	
 	/**
 	 * 
+	 * @param Token
+	 * @param request
+	 * @return
+	 */
+	@PostMapping("/jwt/logout")
+	public String logout(@RequestHeader("Authorization")String Token,@Valid @RequestBody RefreshRequest request);
+	
+	/**
+	 * 
+	 * @param request
+	 * @param authentication
+	 * @return
+	 */
+	@PutMapping(value = "/jwt/change")
+	public ChangePasswordResponse changePassword(@RequestBody ChangePasswordRequest request,@RequestHeader("Authorization") String token);	/**
+	 * 
+	 */
+	
+	/**
+	 * 
 	 * @param token
 	 * @param id
 	 * @return
 	 */
-	@PutMapping("/rent-hub/auth/admin/users/{id}/lock")
+	@PutMapping("/admin/users/{id}/lock")
 	String lockUser(@RequestHeader("Authorization") String token, @PathVariable("id") Long id);
 
 	/**
@@ -98,7 +121,7 @@ public interface AuthServiceFeignClient {
 	 * @param id
 	 * @return
 	 */
-	@PutMapping("/rent-hub/auth/admin/users/{id}/unlock")
+	@PutMapping("/admin/users/{id}/unlock")
 	String unlockUser(@RequestHeader("Authorization") String token, @PathVariable("id") Long id);
 
 	/**
@@ -108,9 +131,8 @@ public interface AuthServiceFeignClient {
 	 * @param enabled
 	 * @return
 	 */
-	@PutMapping("/rent-hub/auth/admin/users/{id}/status")
-	String updateUserStatus(@RequestHeader("Authorization") String token, @PathVariable("id") Long id,
-			@RequestParam("enabled") boolean enabled);
+	@PutMapping("/admin/users/{id}/status")
+	String updateUserStatus(@RequestHeader("Authorization") String token, @PathVariable("id") Long id,@RequestParam("enabled") boolean enabled);
 
 	/**
 	 * 
@@ -119,17 +141,16 @@ public interface AuthServiceFeignClient {
 	 * @param role
 	 * @return
 	 */
-	@PutMapping("/rent-hub/auth/admin/users/{id}/role")
-	String updateUserRole(@RequestHeader("Authorization") String token, @PathVariable("id") Long id,
-			@RequestParam("role") String role);
+	@PutMapping("/admin/users/{id}/role")
+	String updateUserRole(@RequestHeader("Authorization") String token, @PathVariable("id") Long id,@RequestParam("role") String role);
 
 	/**
 	 * 
+	 * @param page
+	 * @param size
+	 * @return
 	 */
-	/*@GetMapping("/rent-hub/auth/admin/users")
-	/*Page<AdminUserResponse> getAllUsers(@RequestHeader("Authorization") String token, @RequestParam("page") int page,
-			@RequestParam("size") int size);*/
+	@GetMapping("/admin/users")
+	public PaginatedUserResponse getAllUsers(@RequestHeader("Authorization")String token,@RequestParam(name = "page", defaultValue = "0") int page,@RequestParam(name = "size", defaultValue = "10") int size);
 	
-	@PostMapping("/jwt/logout")
-	public String logout(@RequestHeader("Authorization")String Token,@Valid @RequestBody RefreshRequest request);
 }

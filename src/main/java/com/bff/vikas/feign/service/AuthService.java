@@ -1,13 +1,15 @@
 package com.bff.vikas.feign.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bff.vikas.feign.client.AuthServiceFeignClient;
+import com.bff.vikas.feign.dto.ChangePasswordRequest;
+import com.bff.vikas.feign.dto.ChangePasswordResponse;
 import com.bff.vikas.feign.dto.LoginRequest;
 import com.bff.vikas.feign.dto.LoginResponse;
+import com.bff.vikas.feign.dto.PaginatedUserResponse;
 import com.bff.vikas.feign.dto.PasswordResetRequest;
 import com.bff.vikas.feign.dto.PasswordResetResponse;
 import com.bff.vikas.feign.dto.RefreshRequest;
@@ -55,8 +57,8 @@ public class AuthService {
 		return feignClient.register(request);
 	}
 
-	@Retry(name = AUTH_SERVICE)
-	@CircuitBreaker(name = AUTH_SERVICE, fallbackMethod = "loginFallback")
+	//@Retry(name = AUTH_SERVICE)
+	//@CircuitBreaker(name = AUTH_SERVICE, fallbackMethod = "loginFallback")
 	public LoginResponse login(LoginRequest request) {
 		return feignClient.login(request);
 	}
@@ -85,8 +87,36 @@ public class AuthService {
 		log.info("Processing logout for token type: REFRESH");
 		return feignClient.logout(token,request);
 	}
-	// --- PROXY FALLBACK METHODS (Directing to Handler) ---
+	
+	public ChangePasswordResponse changePassword(ChangePasswordRequest request,String  token) {
+		log.info("Processing changePassword .....");
+		String authHeader = token.startsWith("Bearer ") ? token : "Bearer " + token;
+		return feignClient.changePassword(request, authHeader);
+	}
+	
+	public String unlockUser(String token, Long id) {
+		log.info("Requesting to unlock user with ID: {}", id);
+		return feignClient.unlockUser(token, id);
+	}
 
+	
+	public String updateUserStatus(String token, Long id, boolean enabled) {
+		log.info("Updating status for user ID: {} to enabled={}", id, enabled);
+		return feignClient.updateUserStatus(token, id, enabled);
+	}
+
+	
+	public String updateUserRole(String token, Long id, String role) {
+		log.info("Updating role for user ID: {} to {}", id, role);
+		return feignClient.updateUserRole(token, id, role);
+	}
+	
+	public PaginatedUserResponse getAllUsers(String token,int page,int size) {
+		log.info("fetching User for page ID: {} size {}", page, size);
+		return feignClient.getAllUsers(token,page, size);
+	}
+	
+	// --- PROXY FALLBACK METHODS (Directing to Handler) ---
 	public UserProfileResponse getProfileFallback(String t, Throwable e) {
 		return fallbackHandler.profileFallback(e);
 	}

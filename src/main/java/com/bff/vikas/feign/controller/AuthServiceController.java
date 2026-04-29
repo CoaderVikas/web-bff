@@ -1,189 +1,140 @@
 package com.bff.vikas.feign.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.bff.vikas.feign.dto.ChangePasswordRequest;
-import com.bff.vikas.feign.dto.ChangePasswordResponse;
-import com.bff.vikas.feign.dto.LoginRequest;
-import com.bff.vikas.feign.dto.LoginResponse;
-import com.bff.vikas.feign.dto.PaginatedUserResponse;
-import com.bff.vikas.feign.dto.PasswordResetRequest;
-import com.bff.vikas.feign.dto.PasswordResetResponse;
-import com.bff.vikas.feign.dto.RefreshRequest;
-import com.bff.vikas.feign.dto.RegisterRequest;
-import com.bff.vikas.feign.dto.UpdateProfileRequest;
-import com.bff.vikas.feign.dto.UserProfileResponse;
+import com.bff.vikas.feign.dto.*;
 import com.bff.vikas.feign.service.AuthService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-
 /**
  * Class      : AuthServiceController
- * Description: [Add brief description here]
+ * Description: BFF Controller to handle authentication and user management operations.
  * Author     : Vikas Yadav
  * Created On : Apr 18, 2026
- * Version    : 1.0
+ * Version    : 1.1
  */
 @RestController
 @RequestMapping(value = "/rent-hub/api/v1/auth")
 @AllArgsConstructor
 @Slf4j
+@Tag(name = "Auth Service APIs", description = "Endpoints for User Authentication, Profile Management, and Admin User Control")
 public class AuthServiceController {
 	
 	@Autowired
 	private AuthService authService;
 	
-	/**
-	 * 
-	 * @param token
-	 * @return
-	 */
-	@GetMapping("/profile")
+	@GetMapping(value = "/profile", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary = "Get User Profile", description = "Fetches the profile details of the currently authenticated user using JWT token.")
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "Profile details retrieved successfully"),
+		@ApiResponse(responseCode = "401", description = "Unauthorized - Invalid or expired token"),
+		@ApiResponse(responseCode = "500", description = "Internal server error")
+	})
 	public ResponseEntity<UserProfileResponse> getMyProfile(@RequestHeader("Authorization") String token) {
-		log.info("In the block of Web_bff");
+		log.info("Fetching profile in Web_bff layer");
 		UserProfileResponse myProfile = authService.getProfile(token);
 		return ResponseEntity.ok(myProfile);
 	}
 	
-	/**
-	 * 
-	 * @param token
-	 * @param request
-	 * @return
-	 */
-	@PutMapping("/profile")
-	public ResponseEntity<?> updateProfile(@RequestHeader("Authorization") String token,
-			@RequestBody UpdateProfileRequest request) {
-			UserProfileResponse response = authService.updateProfile(token, request);
-			return ResponseEntity.ok(response);
+	@PutMapping(value = "/profile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary = "Update Profile", description = "Updates the profile information for the authenticated user.")
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "Profile updated successfully"),
+		@ApiResponse(responseCode = "400", description = "Invalid request data"),
+		@ApiResponse(responseCode = "401", description = "Unauthorized")
+	})
+	public ResponseEntity<?> updateProfile(@RequestHeader("Authorization") String token, @Valid @RequestBody UpdateProfileRequest request) {
+		UserProfileResponse response = authService.updateProfile(token, request);
+		return ResponseEntity.ok(response);
 	}
 	
-	/**
-	 * 
-	 * @param request
-	 * @return
-	 */
-	@PostMapping("/register")
-	public ResponseEntity<LoginResponse> register(@RequestBody RegisterRequest request) {
+	@PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary = "User Registration", description = "Registers a new user and returns an authentication token.")
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "User registered successfully"),
+		@ApiResponse(responseCode = "400", description = "Registration failed - User already exists or invalid data")
+	})
+	public ResponseEntity<LoginResponse> register(@Valid @RequestBody RegisterRequest request) {
 		return ResponseEntity.ok(authService.register(request));
 	}
 	
-	/**
-	 * 
-	 * @param request
-	 * @return
-	 */
-	@PostMapping("/login")
-	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+	@PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary = "User Login", description = "Authenticates user credentials and returns a JWT access token.")
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "Login successful"),
+		@ApiResponse(responseCode = "401", description = "Invalid credentials")
+	})
+	public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
 		return ResponseEntity.ok(authService.login(request));
 	}
 	
-	/**
-	 * 
-	 * @param token
-	 * @param request
-	 * @return
-	 */
-	@PostMapping("/logout")
-	public ResponseEntity<String> logout(@RequestHeader("Authorization") String token,@RequestBody RefreshRequest request) {
-		return ResponseEntity.ok(authService.logout(token,request));
+	@PostMapping(value = "/logout")
+	@Operation(summary = "User Logout", description = "Invalidates the user session and token.")
+	public ResponseEntity<String> logout(@RequestHeader("Authorization") String token, @RequestBody RefreshRequest request) {
+		return ResponseEntity.ok(authService.logout(token, request));
 	}
 
-	/**
-	 * 
-	 * @param request
-	 * @return
-	 */
-	@PostMapping("/password-reset")
-	public ResponseEntity<PasswordResetResponse> resetPassword(@RequestBody PasswordResetRequest request) {
+	@PostMapping(value = "/password-reset", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary = "Reset Password", description = "Resets the password using a valid reset token or OTP.")
+	public ResponseEntity<PasswordResetResponse> resetPassword(@Valid @RequestBody PasswordResetRequest request) {
 		return ResponseEntity.ok(authService.resetPassword(request));
 	}
 	
-	
-	/**
-	 * 
-	 * @param username
-	 * @return
-	 */
 	@PostMapping("/password-forgot")
+	@Operation(summary = "Forgot Password - Generate OTP", description = "Sends an OTP to the user's registered username/email for password recovery.")
 	public ResponseEntity<String> generateOtp(@RequestParam("username") String username) {
 		return ResponseEntity.ok(authService.generateOtp(username));
 	}
 	
-	/**
-	 * 
-	 * @param request
-	 * @param authentication
-	 * @return
-	 */
 	@PutMapping("/password-change")
-	public ResponseEntity<ChangePasswordResponse> changePassword(@RequestBody ChangePasswordRequest request,@RequestHeader("Authorization") String token) {
+	@Operation(summary = "Change Password", description = "Allows an authenticated user to change their current password.")
+	public ResponseEntity<ChangePasswordResponse> changePassword(@Valid @RequestBody ChangePasswordRequest request, @RequestHeader("Authorization") String token) {
 		return ResponseEntity.ok(authService.changePassword(request, token));
 	}
 	
-	/**
-	 * 
-	 * @param token
-	 * @param id
-	 * @return
-	 */
 	@PutMapping("/users/{id}/lock")
+	@Operation(summary = "Lock User Account", description = "Admin only: Locks a user account to prevent login.")
 	public ResponseEntity<String> lockUser(@RequestHeader("Authorization") String token, @PathVariable("id") Long id) {
 		return ResponseEntity.ok(authService.lockUser(token, id));
 	}
 
-	/*
-	/**
-	 * 
-	 * @param token
-	 * @param id
-	 * @return
-	 */
 	@PutMapping("/users/{id}/unlock")
-	public ResponseEntity<String> unlockUser(@RequestHeader("Authorization") String token,@PathVariable("id") Long id) {
+	@Operation(summary = "Unlock User Account", description = "Admin only: Unlocks a previously locked user account.")
+	public ResponseEntity<String> unlockUser(@RequestHeader("Authorization") String token, @PathVariable("id") Long id) {
 		return ResponseEntity.ok(authService.unlockUser(token, id));
 	}
 
-	/**
-	 * 
-	 * @param token
-	 * @param id
-	 * @param enabled
-	 * @return
-	 */
 	@PutMapping("/users/{id}/status")
-	public ResponseEntity<String> updateUserStatus(@RequestHeader("Authorization") String token,@PathVariable("id") Long id, @RequestParam("enabled") boolean enabled) {
+	@Operation(summary = "Update User Status", description = "Admin only: Enable or disable a user account.")
+	public ResponseEntity<String> updateUserStatus(@RequestHeader("Authorization") String token, @PathVariable("id") Long id, @RequestParam("enabled") boolean enabled) {
 		return ResponseEntity.ok(authService.updateUserStatus(token, id, enabled));
 	}
 
-	/**
-	 * 
-	 * @param token
-	 * @param id
-	 * @param role
-	 * @return
-	 */
 	@PutMapping("/users/{id}/role")
-	public ResponseEntity<String> updateUserRole(@RequestHeader("Authorization") String token,@PathVariable("id") Long id, @RequestParam("role") String role) {
+	@Operation(summary = "Update User Role", description = "Admin only: Updates the role (e.g., ADMIN, USER) of a specific user.")
+	public ResponseEntity<String> updateUserRole(@RequestHeader("Authorization") String token, @PathVariable("id") Long id, @RequestParam("role") String role) {
 		return ResponseEntity.ok(authService.updateUserRole(token, id, role));
 	}
 	
-	@GetMapping("/users")
-	public ResponseEntity<PaginatedUserResponse> getAllUsers(@RequestHeader("Authorization") String token,@RequestParam(name = "page", defaultValue = "0") int page,@RequestParam(name = "size", defaultValue = "10") int size) {
-		return ResponseEntity.ok(authService.getAllUsers(token,page, size));
+	@GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary = "Get All Users", description = "Admin only: Retrieves a paginated list of all registered users.")
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "List of users retrieved successfully"),
+		@ApiResponse(responseCode = "403", description = "Forbidden - Insufficient permissions")
+	})
+	public ResponseEntity<PaginatedUserResponse> getAllUsers(@RequestHeader("Authorization") String token, 
+			@RequestParam(name = "page", defaultValue = "0") int page, 
+			@RequestParam(name = "size", defaultValue = "10") int size) {
+		return ResponseEntity.ok(authService.getAllUsers(token, page, size));
 	}
-
 }

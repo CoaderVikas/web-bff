@@ -1,0 +1,62 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: WEB-BFF
+
+eureka:
+  client:
+    service-url:
+      defaultZone: https://eureca-server.onrender.com/eureka
+
+  instance:
+    prefer-ip-address: true
+
+jwt:
+  secret: ${JWT_SECRET}
+
+resilience4j:
+  retry:
+    retry-aspect-order: 2
+    instances:
+      default:
+        max-attempts: 3
+        wait-duration: 1s
+        enable-exponential-backoff: true
+        exponential-max-wait-duration: 5s
+
+  circuitbreaker:
+    circuit-breaker-aspect-order: 1
+    instances:
+      default:
+        register-health-indicator: true
+        event-consumer-buffer-size: 10
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 5
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 5
+        sliding-window-size: 10
+        sliding-window-type: count-based
+        slow-call-duration-threshold: 3s
+        slow-call-rate-threshold: 80
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,circuitbreakers,retries"
+
+  endpoint:
+    health:
+      show-details: always
+
+  health:
+    circuitbreakers:
+      enabled: true
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB

@@ -1,6 +1,6 @@
 package com.bff.vikas.exception;
 
-import com.bff.vikas.feign.dto.ApiError;
+import com.bff.vikas.feign.dto.response.ApiError;
 
 import lombok.Getter;
 

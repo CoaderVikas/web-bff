@@ -2,9 +2,9 @@ package com.bff.vikas.feign.fallback;
 
 import org.springframework.stereotype.Component;
 
-import com.bff.vikas.feign.dto.LoginResponse;
-import com.bff.vikas.feign.dto.PasswordResetResponse;
-import com.bff.vikas.feign.dto.UserProfileResponse;
+import com.bff.vikas.feign.dto.response.LoginResponse;
+import com.bff.vikas.feign.dto.response.PasswordResetResponse;
+import com.bff.vikas.feign.dto.response.UserProfileResponse;
 
 import lombok.extern.slf4j.Slf4j;
 

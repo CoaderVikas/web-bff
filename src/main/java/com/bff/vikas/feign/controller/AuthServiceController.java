@@ -5,7 +5,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.bff.vikas.feign.dto.*;
+import com.bff.vikas.feign.dto.request.ChangePasswordRequest;
+import com.bff.vikas.feign.dto.request.LoginRequest;
+import com.bff.vikas.feign.dto.request.RefreshRequest;
+import com.bff.vikas.feign.dto.request.RegisterRequest;
+import com.bff.vikas.feign.dto.request.UpdateProfileRequest;
+import com.bff.vikas.feign.dto.response.*;
 import com.bff.vikas.feign.service.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;

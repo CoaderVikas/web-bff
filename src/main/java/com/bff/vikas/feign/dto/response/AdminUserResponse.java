@@ -1,4 +1,4 @@
-package com.bff.vikas.feign.dto;
+package com.bff.vikas.feign.dto.response;
 
 import java.time.LocalDateTime;
 

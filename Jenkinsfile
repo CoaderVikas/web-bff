@@ -5,21 +5,21 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo "✅ Checking out source code from Git"
+                echo "Checking out source code from Git"
                 git branch: 'feature_dev', url: 'https://github.com/CoaderVikas/web-bff.git'
             }
         }
 
         stage('Build') {
             steps {
-                echo "📦 Building Spring Boot project with Gradle (tests skipped)"
+                echo "Building Spring Boot project with Gradle (tests skipped)"
                 bat 'gradlew.bat clean build -x test --stacktrace --info'
             }
         }
 
         stage('Run') {
             steps {
-                echo "🚀 Running Spring Boot application in background"
+                echo "Running Spring Boot application in background"
                 bat '''
                 REM Kill any running Java apps to avoid port conflict
                 taskkill /F /IM java.exe || exit 0
@@ -35,10 +35,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ Build and deployment completed successfully!"
+            echo "Build and deployment completed successfully!"
         }
         failure {
-            echo "❌ Build failed. Check console logs for details."
+            echo "Build failed. Check console logs for details."
         }
     }
 }

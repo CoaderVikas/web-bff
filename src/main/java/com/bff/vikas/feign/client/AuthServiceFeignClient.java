@@ -10,17 +10,17 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bff.vikas.config.FeignConfig;
-import com.bff.vikas.feign.dto.ChangePasswordRequest;
-import com.bff.vikas.feign.dto.ChangePasswordResponse;
-import com.bff.vikas.feign.dto.LoginRequest;
-import com.bff.vikas.feign.dto.LoginResponse;
-import com.bff.vikas.feign.dto.PaginatedUserResponse;
-import com.bff.vikas.feign.dto.PasswordResetRequest;
-import com.bff.vikas.feign.dto.PasswordResetResponse;
-import com.bff.vikas.feign.dto.RefreshRequest;
-import com.bff.vikas.feign.dto.RegisterRequest;
-import com.bff.vikas.feign.dto.UpdateProfileRequest;
-import com.bff.vikas.feign.dto.UserProfileResponse;
+import com.bff.vikas.feign.dto.request.ChangePasswordRequest;
+import com.bff.vikas.feign.dto.request.LoginRequest;
+import com.bff.vikas.feign.dto.request.RefreshRequest;
+import com.bff.vikas.feign.dto.request.RegisterRequest;
+import com.bff.vikas.feign.dto.request.UpdateProfileRequest;
+import com.bff.vikas.feign.dto.response.ChangePasswordResponse;
+import com.bff.vikas.feign.dto.response.LoginResponse;
+import com.bff.vikas.feign.dto.response.PaginatedUserResponse;
+import com.bff.vikas.feign.dto.response.PasswordResetRequest;
+import com.bff.vikas.feign.dto.response.PasswordResetResponse;
+import com.bff.vikas.feign.dto.response.UserProfileResponse;
 
 import jakarta.validation.Valid;
 

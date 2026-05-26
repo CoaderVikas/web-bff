@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 
 import com.bff.vikas.exception.BffServiceException;
-import com.bff.vikas.feign.dto.ApiError;
+import com.bff.vikas.feign.dto.response.ApiError;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

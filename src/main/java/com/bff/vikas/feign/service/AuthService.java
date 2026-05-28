@@ -36,8 +36,8 @@ public class AuthService {
 
 	// --- PROFILE METHODS ---
 
-	@Retry(name = AUTH_SERVICE)
-	@CircuitBreaker(name = AUTH_SERVICE, fallbackMethod = "getProfileFallback")
+	//@Retry(name = AUTH_SERVICE)
+	//@CircuitBreaker(name = AUTH_SERVICE, fallbackMethod = "getProfileFallback")
 	public UserProfileResponse getProfile(String token) {
 		log.info("**** Get Profile calling...****");
 		return feignClient.getMyProfile(token);

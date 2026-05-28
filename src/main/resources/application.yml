@@ -2,14 +2,14 @@
 server:
   port: 9095
 
-#profile configuration
-profiles:
-    active: local
-
 #application name configiration
 spring:
   application:
     name: web-bff
+
+#profile configuration
+profiles:
+    active: local
 
 #jwt configuration
 jwt:
@@ -62,7 +62,6 @@ management:
   health:
     circuitbreakers:
       enabled: true 
-
 
   servlet:
     multipart:

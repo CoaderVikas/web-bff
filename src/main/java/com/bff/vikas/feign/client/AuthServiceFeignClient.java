@@ -1,6 +1,7 @@
 package com.bff.vikas.feign.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -94,6 +95,15 @@ public interface AuthServiceFeignClient {
 	 */
 	@PostMapping("/jwt/logout")
 	public String logout(@RequestHeader("Authorization")String Token,@Valid @RequestBody RefreshRequest request);
+	
+	/**
+	 * 
+	 * @param Token
+	 * @param request
+	 * @return
+	 */
+	@PostMapping("/jwt/refresh")
+	public LoginResponse refreshToken(@RequestHeader("Authorization")String Token,@RequestBody RefreshRequest request);
 	
 	/**
 	 * 

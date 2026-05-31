@@ -144,4 +144,13 @@ public class AuthService {
 	public PasswordResetResponse pwResetFallback(PasswordResetRequest r, Throwable e) {
 		return fallbackHandler.passwordResetFallback(e);
 	}
+
+	/**
+	 * @param token
+	 * @param request
+	 * @return
+	 */
+	public LoginResponse refresh(String token, RefreshRequest request) {
+		return feignClient.refreshToken(token, request);
+	}
 }

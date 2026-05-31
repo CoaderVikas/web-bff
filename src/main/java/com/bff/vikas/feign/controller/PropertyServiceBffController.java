@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -142,11 +143,11 @@ public class PropertyServiceBffController {
 	@GetMapping("/count")
 	@Operation(summary = "Get Total Properties", description = "Returns total active properties count")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "Count fetched successfully") })
-	public ResponseEntity<Long> getTotalProperties() {
+	public ResponseEntity<Long> getTotalProperties(@RequestHeader("Authorization") String token) {
 
 		log.info("BFF: Get Total Properties Count");
 
-		Long count = propertyService.getTotalProperties();
+		Long count = propertyService.getTotalProperties(token);
 
 		return count != null ? ResponseEntity.ok(count) : ResponseEntity.internalServerError().build();
 	}

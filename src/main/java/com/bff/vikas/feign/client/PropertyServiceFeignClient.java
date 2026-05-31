@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -83,7 +84,7 @@ public interface PropertyServiceFeignClient {
 	 * Get total property count
 	 */
 	@GetMapping("/count")
-	Long getTotalProperties();
+	Long getTotalProperties(@RequestHeader("Authorization") String token);
 	/**
 	 * 
 	 * @return

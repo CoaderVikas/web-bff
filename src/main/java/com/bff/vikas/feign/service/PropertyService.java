@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bff.vikas.feign.client.PropertyServiceFeignClient;
@@ -108,9 +109,9 @@ public class PropertyService {
 		return feignClient.uploadPropertyImage(id, file);
 	}
 
-	public Long getTotalProperties() {
+	public Long getTotalProperties(String token) {
 		log.info("Calling Property Service: getTotalProperties");
-		return feignClient.getTotalProperties();
+		return feignClient.getTotalProperties(token);
 	}
 
 	public PropertyResponse createPropertyFallback(PropertyCreateRequest req, Throwable e) {

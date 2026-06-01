@@ -53,6 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		// 2️⃣ Extract Authorization header
 		String authHeader = request.getHeader("Authorization");
+		logger.info("🔹 BFF : Authorization = {}", authHeader);
 		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 			logger.warn("*********** Missing or invalid Authorization header ***********");
 			sendError(response, "Missing or Invalid Authorization Header");
@@ -61,7 +62,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		// 3️⃣ Extract token
 		String token = authHeader.substring(7);
-		logger.info("*********** JWT token received ***********");
+		
+		logger.info("*********** JWT token {} received BFF ***********",token);
 
 		// 4️⃣ Validate token
 		if (!jwt.isTokenValid(token)) {

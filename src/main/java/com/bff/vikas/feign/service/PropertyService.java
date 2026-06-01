@@ -45,8 +45,8 @@ public class PropertyService {
 	 * @param request
 	 * @return
 	 */
-	@Retry(name = PROPERTY_SERVICE)
-	@CircuitBreaker(name = PROPERTY_SERVICE, fallbackMethod = "createPropertyFallback")
+	//@Retry(name = PROPERTY_SERVICE)
+	//@CircuitBreaker(name = PROPERTY_SERVICE, fallbackMethod = "createPropertyFallback")
 	public PropertyResponse createProperty(PropertyCreateRequest request) {
 		log.info("Calling Property Service: createProperty");
 		return feignClient.createProperty(request).getBody();

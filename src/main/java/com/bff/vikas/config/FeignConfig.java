@@ -11,6 +11,7 @@ import feign.RequestInterceptor;
 import feign.codec.Encoder;
 import feign.codec.ErrorDecoder;
 import feign.form.spring.SpringFormEncoder;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Class      : FeignConfig
@@ -21,6 +22,7 @@ import feign.form.spring.SpringFormEncoder;
  */
 
 @Configuration
+@Slf4j
 public class FeignConfig {
 
 	@Bean
@@ -43,6 +45,7 @@ public class FeignConfig {
 			if (attrs != null) {
 
 				String token = attrs.getRequest().getHeader("Authorization");
+				log.info("*********** Passing token via feign {}",token);
 
 				if (token != null && !token.isEmpty()) {
 					requestTemplate.header("Authorization", token);

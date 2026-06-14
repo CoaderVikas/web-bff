@@ -2,8 +2,7 @@ package com.bff.vikas.feign.fallback;
 
 import org.springframework.stereotype.Component;
 
-import com.bff.vikas.feign.dto.response.PropertyPageResponse;
-import com.bff.vikas.feign.dto.response.PropertyResponse;
+import com.bff.vikas.feign.dto.response.PropertyResponseDTO;
 
 /**
  * Class      : PropertyFallbackHandler
@@ -16,15 +15,12 @@ import com.bff.vikas.feign.dto.response.PropertyResponse;
 @Component
 public class PropertyFallbackHandler {
 
-    public PropertyResponse propertyFallback(Throwable e) {
-        return new PropertyResponse(); // return safe default
-    }
-
-    public PropertyPageResponse propertyPageFallback(Throwable e) {
-        return new PropertyPageResponse(); // empty response
+    public PropertyResponseDTO propertyFallback(Throwable e) {
+        return new PropertyResponseDTO(); // return safe default
     }
 
     public String stringFallback(Throwable e) {
         return "Service unavailable. Please try again later.";
     }
 }
+

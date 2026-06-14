@@ -5,19 +5,13 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bff.vikas.feign.client.PropertyServiceFeignClient;
-import com.bff.vikas.feign.dto.request.PropertyCreateRequest;
-import com.bff.vikas.feign.dto.request.PropertySearchRequest;
-import com.bff.vikas.feign.dto.request.PropertyUpdateRequest;
-import com.bff.vikas.feign.dto.response.PropertyPageResponse;
-import com.bff.vikas.feign.dto.response.PropertyResponse;
+import com.bff.vikas.feign.dto.request.PropertyRequestDTO;
+import com.bff.vikas.feign.dto.response.PropertyResponseDTO;
 import com.bff.vikas.feign.fallback.PropertyFallbackHandler;
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -47,7 +41,7 @@ public class PropertyService {
 	 */
 	//@Retry(name = PROPERTY_SERVICE)
 	//@CircuitBreaker(name = PROPERTY_SERVICE, fallbackMethod = "createPropertyFallback")
-	public PropertyResponse createProperty(PropertyCreateRequest request) {
+	public PropertyResponseDTO createProperty(PropertyRequestDTO request) {
 		log.info("Calling Property Service: createProperty");
 		return feignClient.createProperty(request).getBody();
 	}
@@ -59,28 +53,15 @@ public class PropertyService {
 	 */
 	//@Retry(name = PROPERTY_SERVICE)
 	//@CircuitBreaker(name = PROPERTY_SERVICE, fallbackMethod = "getPropertyFallback")
-	public PropertyResponse getProperty(UUID id) {
+	public PropertyResponseDTO getProperty(String id) {
 		log.info("Calling Property Service: getProperty | id={}", id);
 		return feignClient.getPropertyById(id).getBody();
 	}
 
-	/**
-	 * 
-	 * @param request
-	 * @return
-	 */
-	//@Retry(name = PROPERTY_SERVICE)
-	//@CircuitBreaker(name = PROPERTY_SERVICE, fallbackMethod = "searchPropertyFallback")
-	public PropertyPageResponse searchProperties(PropertySearchRequest request) {
-		log.info("Calling Property Service: searchProperties");
-		return feignClient.searchProperties(request).getBody();
-	}
-
-	// --- UPDATE ---
-
+	
 	//@Retry(name = PROPERTY_SERVICE)
 	//@CircuitBreaker(name = PROPERTY_SERVICE, fallbackMethod = "updatePropertyFallback")
-	public PropertyResponse updateProperty(UUID id, PropertyUpdateRequest request) {
+	public PropertyResponseDTO updateProperty(String  id, PropertyRequestDTO request) {
 		log.info("Calling Property Service: updateProperty | id={}", id);
 		return feignClient.updateProperty(id, request).getBody();
 	}
@@ -92,7 +73,7 @@ public class PropertyService {
 	 */
 	//@Retry(name = PROPERTY_SERVICE)
 	//@CircuitBreaker(name = PROPERTY_SERVICE, fallbackMethod = "deletePropertyFallback")
-	public String deleteProperty(UUID id) {
+	public String deleteProperty(String id) {
 		log.info("Calling Property Service: deleteProperty | id={}", id);
 		return feignClient.deleteProperty(id).getBody();
 	}
@@ -100,7 +81,7 @@ public class PropertyService {
 	 * 
 	 * @return
 	 */
-	public List<PropertyResponse> getMyProperties() {
+	public List<PropertyResponseDTO> getMyProperties() {
 	    return feignClient.getMyProperties();
 	}
 	
@@ -114,19 +95,15 @@ public class PropertyService {
 		return feignClient.getTotalProperties(token);
 	}
 
-	public PropertyResponse createPropertyFallback(PropertyCreateRequest req, Throwable e) {
+	public PropertyResponseDTO createPropertyFallback(PropertyRequestDTO req, Throwable e) {
 		return fallbackHandler.propertyFallback(e);
 	}
 
-	public PropertyResponse getPropertyFallback(UUID id, Throwable e) {
+	public PropertyResponseDTO getPropertyFallback(UUID id, Throwable e) {
 		return fallbackHandler.propertyFallback(e);
 	}
 
-	public PropertyPageResponse searchPropertyFallback(PropertySearchRequest req, Throwable e) {
-		return fallbackHandler.propertyPageFallback(e);
-	}
-
-	public PropertyResponse updatePropertyFallback(UUID id, PropertyUpdateRequest req, Throwable e) {
+	public PropertyResponseDTO updatePropertyFallback(UUID id, PropertyRequestDTO req, Throwable e) {
 		return fallbackHandler.propertyFallback(e);
 	}
 

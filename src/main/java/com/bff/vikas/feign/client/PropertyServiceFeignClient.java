@@ -17,11 +17,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bff.vikas.config.FeignConfig;
-import com.bff.vikas.feign.dto.request.PropertyCreateRequest;
-import com.bff.vikas.feign.dto.request.PropertySearchRequest;
-import com.bff.vikas.feign.dto.request.PropertyUpdateRequest;
-import com.bff.vikas.feign.dto.response.PropertyPageResponse;
-import com.bff.vikas.feign.dto.response.PropertyResponse;
+import com.bff.vikas.feign.dto.request.PropertyRequestDTO;
+import com.bff.vikas.feign.dto.response.PropertyResponseDTO;
 
 /**
  * Class      : PropertyServiceFeignClient
@@ -40,23 +37,16 @@ public interface PropertyServiceFeignClient {
 	 * @return
 	 */
 	@PostMapping
-	ResponseEntity<PropertyResponse> createProperty(@RequestBody PropertyCreateRequest request);
+	//ResponseEntity<PropertyResponse> createProperty(@RequestBody PropertyCreateRequest request);
+	ResponseEntity<PropertyResponseDTO> createProperty(@RequestBody PropertyRequestDTO request);
 
 	/**
 	 * 
 	 * @param id
 	 * @return
 	 */
-	@GetMapping("/{id}")
-	ResponseEntity<PropertyResponse> getPropertyById(@PathVariable("id") UUID id);
-
-	/**
-	 * 
-	 * @param request
-	 * @return
-	 */
-	@PostMapping("/search")
-	ResponseEntity<PropertyPageResponse> searchProperties(@RequestBody PropertySearchRequest request);
+	@GetMapping("/{propertyId}")
+	ResponseEntity<PropertyResponseDTO> getPropertyById(@PathVariable("propertyId") String propertyId);
 
 	/**
 	 * 
@@ -64,31 +54,42 @@ public interface PropertyServiceFeignClient {
 	 * @param request
 	 * @return
 	 */
-	@PutMapping("/{id}")
-	ResponseEntity<PropertyResponse> updateProperty(@PathVariable("id") UUID id,@RequestBody PropertyUpdateRequest request);
-
+	@PutMapping("/{propertyId}")
+	ResponseEntity<PropertyResponseDTO> updateProperty(@PathVariable("propertyId") String propertyId, @RequestBody PropertyRequestDTO requestDTO);
+	
+	/**
+	 * 
+	 * @return
+	 */
+	@GetMapping("/me")
+	List<PropertyResponseDTO> getMyProperties();
+	
+	
 	/**
 	 * 
 	 * @param id
 	 * @return
 	 */
-	@DeleteMapping("/{id}")
-	ResponseEntity<String> deleteProperty(@PathVariable("id") UUID id);
-	/**
-	 * Upload property image
-	 */
-	@PostMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	String uploadPropertyImage(@PathVariable("id") UUID propertyId,@RequestPart("file") MultipartFile file);
+	@DeleteMapping("/{propertyId}")
+	ResponseEntity<String> deleteProperty(@PathVariable("propertyId") String propertyId);
 
 	/**
 	 * Get total property count
 	 */
 	@GetMapping("/count")
 	Long getTotalProperties(@RequestHeader("Authorization") String token);
+	
 	/**
 	 * 
+	 * @param request
 	 * @return
 	 */
-	@GetMapping("/me")
-    List<PropertyResponse> getMyProperties();
+	//@PostMapping("/search")
+	//ResponseEntity<PropertyPageResponse> searchProperties(@RequestBody PropertySearchRequest request);
+	
+	/**
+	 * Upload property image
+	 */
+	@PostMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	String uploadPropertyImage(@PathVariable("id") UUID propertyId,@RequestPart("file") MultipartFile file);
 }

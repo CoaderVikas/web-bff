@@ -18,11 +18,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.bff.vikas.feign.dto.request.PropertyCreateRequest;
-import com.bff.vikas.feign.dto.request.PropertySearchRequest;
-import com.bff.vikas.feign.dto.request.PropertyUpdateRequest;
-import com.bff.vikas.feign.dto.response.PropertyPageResponse;
-import com.bff.vikas.feign.dto.response.PropertyResponse;
+import com.bff.vikas.feign.dto.request.PropertyRequestDTO;
+import com.bff.vikas.feign.dto.response.PropertyResponseDTO;
 import com.bff.vikas.feign.service.PropertyService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -54,11 +51,11 @@ public class PropertyServiceBffController {
 	@Operation(summary = "Create Property", description = "Creates a new property listing.")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "Property created successfully"),
 			@ApiResponse(responseCode = "400", description = "Invalid request data") })
-	public ResponseEntity<PropertyResponse> createProperty(@Valid @RequestBody PropertyCreateRequest request) {
+	public ResponseEntity<PropertyResponseDTO> createProperty(@Valid @RequestBody PropertyRequestDTO request) {
 
 		log.info("BFF: Create Property");
 
-		PropertyResponse property = propertyService.createProperty(request);
+		PropertyResponseDTO property = propertyService.createProperty(request);
 
 		return (property != null)
 				? ResponseEntity.ok(property)
@@ -69,41 +66,47 @@ public class PropertyServiceBffController {
 	@Operation(summary = "Get Property By ID", description = "Fetch property details using property ID.")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "Property retrieved successfully"),
 			@ApiResponse(responseCode = "404", description = "Property not found") })
-	public ResponseEntity<PropertyResponse> getPropertyById(@PathVariable("id") UUID id) {
+	public ResponseEntity<PropertyResponseDTO> getPropertyById(@PathVariable("id") String id) {
 
 		log.info("BFF: Get Property | id={}", id);
 
-		PropertyResponse property = propertyService.getProperty(id);
+		PropertyResponseDTO property = propertyService.getProperty(id);
 
 		return (property != null)
 				? ResponseEntity.ok(property)
 				: ResponseEntity.internalServerError().build();
 	}
 
-	@PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Operation(summary = "Search Properties", description = "Search properties with filters and pagination.")
-	@ApiResponses({ @ApiResponse(responseCode = "200", description = "Properties fetched successfully") })
-	public ResponseEntity<PropertyPageResponse> searchProperties(@RequestBody PropertySearchRequest request) {
-
-		log.info("BFF: Search Properties | request={}", request);
-
-		PropertyPageResponse response = propertyService.searchProperties(request);
-
-		return (response != null)
-				? ResponseEntity.ok(response)
-				: ResponseEntity.internalServerError().build();
-	}
+	/*
+	 * @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE,
+	 * produces = MediaType.APPLICATION_JSON_VALUE)
+	 * 
+	 * @Operation(summary = "Search Properties", description =
+	 * "Search properties with filters and pagination.")
+	 * 
+	 * @ApiResponses({ @ApiResponse(responseCode = "200", description =
+	 * "Properties fetched successfully") }) public
+	 * ResponseEntity<PropertyPageResponse> searchProperties(@RequestBody
+	 * PropertySearchRequest request) {
+	 * 
+	 * log.info("BFF: Search Properties | request={}", request);
+	 * 
+	 * PropertyPageResponse response = propertyService.searchProperties(request);
+	 * 
+	 * return (response != null) ? ResponseEntity.ok(response) :
+	 * ResponseEntity.internalServerError().build(); }
+	 */
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Operation(summary = "Update Property", description = "Updates an existing property.")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "Property updated successfully"),
 			@ApiResponse(responseCode = "404", description = "Property not found") })
-	public ResponseEntity<PropertyResponse> updateProperty(@PathVariable("id") UUID id,
-			@RequestBody PropertyUpdateRequest request) {
+	public ResponseEntity<PropertyResponseDTO> updateProperty(@PathVariable("id") String id,
+			@RequestBody PropertyRequestDTO request) {
 
 		log.info("BFF: Update Property | id={}", id);
 
-		PropertyResponse updated = propertyService.updateProperty(id, request);
+		PropertyResponseDTO updated = propertyService.updateProperty(id, request);
 
 		return (updated != null)
 				? ResponseEntity.ok(updated)
@@ -114,7 +117,7 @@ public class PropertyServiceBffController {
 	@Operation(summary = "Delete Property", description = "Deletes a property by ID.")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "Property deleted successfully"),
 			@ApiResponse(responseCode = "404", description = "Property not found") })
-	public ResponseEntity<String> deleteProperty(@PathVariable("id") UUID id) {
+	public ResponseEntity<String> deleteProperty(@PathVariable("id") String id) {
 
 		log.info("BFF: Delete Property | id={}", id);
 
@@ -157,7 +160,7 @@ public class PropertyServiceBffController {
 	 * @return
 	 */
 	@GetMapping("/me")
-	public ResponseEntity<List<PropertyResponse>> getMyProperties() {
+	public ResponseEntity<List<PropertyResponseDTO>> getMyProperties() {
 	    return ResponseEntity.ok(propertyService.getMyProperties());
 	}
 }

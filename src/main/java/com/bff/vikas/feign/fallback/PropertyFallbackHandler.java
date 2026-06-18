@@ -15,12 +15,11 @@ import com.bff.vikas.feign.dto.response.PropertyResponseDTO;
 @Component
 public class PropertyFallbackHandler {
 
-    public PropertyResponseDTO propertyFallback(Throwable e) {
-        return new PropertyResponseDTO(); // return safe default
-    }
+	public PropertyResponseDTO propertyFallback(Throwable e) {
+		return new PropertyResponseDTO(); // return safe default
+	}
 
-    public String stringFallback(Throwable e) {
-        return "Service unavailable. Please try again later.";
-    }
+	public String stringFallback(Throwable e) {
+		return "Service unavailable. Please try again later.";
+	}
 }
-

@@ -63,7 +63,10 @@ management:
     circuitbreakers:
       enabled: true 
 
-  servlet:
-    multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
+servlet:
+  multipart:
+    max-file-size: 10MB
+    max-request-size: 10MB
+
+api:
+  base-path: /rent-hub/api/v1

@@ -39,7 +39,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @RestController
-@RequestMapping(value = "/rent-hub/api/v1/properties")
+//@RequestMapping(value = "/rent-hub/api/v1/properties")
+@RequestMapping(value = "/properties")
 @AllArgsConstructor
 @Slf4j
 @Tag(name = "Property Service APIs", description = "Endpoints for Property Management (Create, Update, Search, Delete)")

@@ -29,7 +29,8 @@ import lombok.extern.slf4j.Slf4j;
  * Version    : 1.1
  */
 @RestController
-@RequestMapping(value = "/rent-hub/api/v1/auth")
+//@RequestMapping(value = "/rent-hub/api/v1/auth")
+@RequestMapping(value = "/auth")
 @AllArgsConstructor
 @Slf4j
 @Tag(name = "Auth Service APIs", description = "Endpoints for User Authentication, Profile Management, and Admin User Control")

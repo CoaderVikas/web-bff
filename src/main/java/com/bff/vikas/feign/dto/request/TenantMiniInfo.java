@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TenantMiniInfo {
+	private String tenantCustomId;
 	private String name;
 	private String contact;
 	private String checkInDate; // Check-in

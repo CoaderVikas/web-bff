@@ -63,10 +63,6 @@ public interface TenantsServiceFeignClient {
 	TenantResponseDto updateTenantDataOnly(@PathVariable("customId") String customId,
 			@RequestBody TenantUpdateRequestDto dto);
 
-	@PutMapping(value = "/uploadImage/{customId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	TenantResponseDto updateImageProfile(@PathVariable("customId") String customId,
-			@RequestParam("file") MultipartFile file);
-
 	@GetMapping("/getImage/{customId}")
 	Resource getTenantImage(@PathVariable("customId") String customId);
 
@@ -84,4 +80,9 @@ public interface TenantsServiceFeignClient {
 
 	@GetMapping("/{tenantCustomId}/feedback")
 	List<FeedbackResponseDto> getFeedbackHistory(@PathVariable("tenantCustomId") String tenantCustomId);
+	
+	@PutMapping(value = "/uploadImage/{customId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	TenantResponseDto updateImageProfile(@PathVariable("customId") String customId,
+			@RequestPart(value = "file",required = false) MultipartFile file);
+
 }

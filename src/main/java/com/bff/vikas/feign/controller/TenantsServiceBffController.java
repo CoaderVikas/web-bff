@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -170,7 +171,7 @@ public class TenantsServiceBffController {
 			@ApiResponse(responseCode = "400", description = "Invalid File") })
 	@PutMapping(value = "/uploadImage/{customId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<TenantResponseDto> updateImageProfile(@PathVariable("customId") String customId,
-			@RequestParam(value = "file") MultipartFile file) {
+			@RequestPart(value = "file",required = false) MultipartFile file) {
 		return ResponseEntity.ok(tenantsService.updateTenantImage(customId, file));
 	}
 	

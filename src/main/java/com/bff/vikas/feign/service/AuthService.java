@@ -1,16 +1,19 @@
 package com.bff.vikas.feign.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bff.vikas.feign.client.AuthServiceFeignClient;
 import com.bff.vikas.feign.dto.request.ChangePasswordRequest;
+import com.bff.vikas.feign.dto.request.GoogleAuthRequest;
 import com.bff.vikas.feign.dto.request.LoginRequest;
 import com.bff.vikas.feign.dto.request.RefreshRequest;
 import com.bff.vikas.feign.dto.request.RegisterRequest;
 import com.bff.vikas.feign.dto.request.UpdateProfileRequest;
 import com.bff.vikas.feign.dto.response.ChangePasswordResponse;
+import com.bff.vikas.feign.dto.response.GoogleAuthResponse;
 import com.bff.vikas.feign.dto.response.LoginResponse;
 import com.bff.vikas.feign.dto.response.PaginatedUserResponse;
 import com.bff.vikas.feign.dto.response.PasswordResetRequest;
@@ -152,5 +155,19 @@ public class AuthService {
 	 */
 	public LoginResponse refresh(String token, RefreshRequest request) {
 		return feignClient.refreshToken(token, request);
+	}
+	
+//	@PutMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public UserProfileResponse updateProfileImage(MultipartFile file) {
+		return feignClient.updateUserPhoto(file);
+	}
+	
+	public Resource getProfileImage() {
+		return feignClient.getUserImage();
+	}
+	
+	public GoogleAuthResponse googleAuth(GoogleAuthRequest request) {
+	    log.info("Processing Google auth in BFF layer");
+	    return feignClient.googleAuth(request);
 	}
 }

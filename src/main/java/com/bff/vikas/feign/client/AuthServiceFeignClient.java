@@ -1,7 +1,8 @@
 package com.bff.vikas.feign.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,14 +10,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bff.vikas.config.FeignConfig;
 import com.bff.vikas.feign.dto.request.ChangePasswordRequest;
+import com.bff.vikas.feign.dto.request.GoogleAuthRequest;
 import com.bff.vikas.feign.dto.request.LoginRequest;
 import com.bff.vikas.feign.dto.request.RefreshRequest;
 import com.bff.vikas.feign.dto.request.RegisterRequest;
 import com.bff.vikas.feign.dto.request.UpdateProfileRequest;
 import com.bff.vikas.feign.dto.response.ChangePasswordResponse;
+import com.bff.vikas.feign.dto.response.GoogleAuthResponse;
 import com.bff.vikas.feign.dto.response.LoginResponse;
 import com.bff.vikas.feign.dto.response.PaginatedUserResponse;
 import com.bff.vikas.feign.dto.response.PasswordResetRequest;
@@ -163,4 +168,18 @@ public interface AuthServiceFeignClient {
 	@GetMapping("/admin/users")
 	public PaginatedUserResponse getAllUsers(@RequestHeader("Authorization")String token,@RequestParam(name = "page", defaultValue = "0") int page,@RequestParam(name = "size", defaultValue = "10") int size);
 	
+	/**
+	 * 
+	 * @param authentication
+	 * @param file
+	 * @return
+	 */
+	@PutMapping(value = "/profile/image",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	UserProfileResponse updateUserPhoto(@RequestPart("file") MultipartFile file);
+	
+	@GetMapping("/profile/getImage")
+	Resource getUserImage();
+	
+	@PostMapping("/auth/google")
+	GoogleAuthResponse googleAuth(@RequestBody GoogleAuthRequest request);
 }

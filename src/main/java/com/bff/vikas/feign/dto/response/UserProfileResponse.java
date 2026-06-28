@@ -35,6 +35,7 @@ public class UserProfileResponse {
 
 	// Account status
 	private Boolean enabled;
+	 private String photoUrl;
 	private Boolean accountNonLocked;
 	
 	//for status

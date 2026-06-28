@@ -1,16 +1,34 @@
 package com.bff.vikas.feign.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bff.vikas.feign.dto.request.ChangePasswordRequest;
+import com.bff.vikas.feign.dto.request.GoogleAuthRequest;
 import com.bff.vikas.feign.dto.request.LoginRequest;
 import com.bff.vikas.feign.dto.request.RefreshRequest;
 import com.bff.vikas.feign.dto.request.RegisterRequest;
 import com.bff.vikas.feign.dto.request.UpdateProfileRequest;
-import com.bff.vikas.feign.dto.response.*;
+import com.bff.vikas.feign.dto.response.ChangePasswordResponse;
+import com.bff.vikas.feign.dto.response.GoogleAuthResponse;
+import com.bff.vikas.feign.dto.response.LoginResponse;
+import com.bff.vikas.feign.dto.response.PaginatedUserResponse;
+import com.bff.vikas.feign.dto.response.PasswordResetRequest;
+import com.bff.vikas.feign.dto.response.PasswordResetResponse;
+import com.bff.vikas.feign.dto.response.UserProfileResponse;
 import com.bff.vikas.feign.service.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,18 +68,6 @@ public class AuthServiceController {
 		log.info("Fetching profile in Web_bff layer");
 		UserProfileResponse myProfile = authService.getProfile(token);
 		return ResponseEntity.ok(myProfile);
-	}
-	
-	@PutMapping(value = "/profile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Operation(summary = "Update Profile", description = "Updates the profile information for the authenticated user.")
-	@ApiResponses({
-		@ApiResponse(responseCode = "200", description = "Profile updated successfully"),
-		@ApiResponse(responseCode = "400", description = "Invalid request data"),
-		@ApiResponse(responseCode = "401", description = "Unauthorized")
-	})
-	public ResponseEntity<?> updateProfile(@RequestHeader("Authorization") String token, @Valid @RequestBody UpdateProfileRequest request) {
-		UserProfileResponse response = authService.updateProfile(token, request);
-		return ResponseEntity.ok(response);
 	}
 	
 	@PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -148,5 +154,56 @@ public class AuthServiceController {
 			@RequestParam(name = "page", defaultValue = "0") int page, 
 			@RequestParam(name = "size", defaultValue = "10") int size) {
 		return ResponseEntity.ok(authService.getAllUsers(token, page, size));
+	}
+	
+	@PutMapping(value = "/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary = "Update Profile", description = "Updates the profile information for the authenticated user.")
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "Profile updated successfully"),
+		@ApiResponse(responseCode = "400", description = "Invalid request data"),
+		@ApiResponse(responseCode = "401", description = "Unauthorized")
+	})
+	public ResponseEntity<?> updateProfile(@RequestHeader("Authorization") String token, @Valid @RequestBody UpdateProfileRequest request) {
+		UserProfileResponse response = authService.updateProfile(token, request);
+		return ResponseEntity.ok(response);
+	}
+	
+	@PutMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@Operation(summary = "Update Profile", description = "Updates the profile information for the authenticated user.")
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "Profile updated successfully"),
+		@ApiResponse(responseCode = "400", description = "Invalid request data"),
+		@ApiResponse(responseCode = "401", description = "Unauthorized")
+	})
+	public ResponseEntity<UserProfileResponse> updateProfileImage(@RequestPart(value = "file",required = false) MultipartFile file) {
+		UserProfileResponse response = authService.updateProfileImage(file);
+		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping(value = "/getImage")
+	@Operation(summary = "Update Profile", description = "Updates the profile information for the authenticated user.")
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "Profile updated successfully"),
+		@ApiResponse(responseCode = "400", description = "Invalid request data"),
+		@ApiResponse(responseCode = "401", description = "Unauthorized")
+	})
+	public ResponseEntity<Resource> updateProfileImage() {
+		Resource profileImage = authService.getProfileImage();
+		return ResponseEntity.ok(profileImage);
+	}
+	
+	@PostMapping(value = "/google", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary = "Google OAuth Login", description = "Authenticates user via Google ID token and returns JWT.")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "Google authentication successful"),
+			@ApiResponse(responseCode = "401", description = "Invalid Google token") })
+	public ResponseEntity<?> googleAuth(@RequestBody GoogleAuthRequest request) {
+		try {
+			log.info("Google auth request received in BFF layer");
+			GoogleAuthResponse response = authService.googleAuth(request);
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			log.error("Google auth failed: {}", e.getMessage());
+			return ResponseEntity.status(401).body("Google authentication failed: " + e.getMessage());
+		}
 	}
 }

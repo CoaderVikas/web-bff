@@ -153,8 +153,8 @@ public class AuthService {
 	 * @param request
 	 * @return
 	 */
-	public LoginResponse refresh(String token, RefreshRequest request) {
-		return feignClient.refreshToken(token, request);
+	public LoginResponse refresh(RefreshRequest request) {
+		return feignClient.refreshToken(request);
 	}
 	
 //	@PutMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

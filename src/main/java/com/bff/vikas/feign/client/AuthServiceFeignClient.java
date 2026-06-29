@@ -108,7 +108,7 @@ public interface AuthServiceFeignClient {
 	 * @return
 	 */
 	@PostMapping("/jwt/refresh")
-	public LoginResponse refreshToken(@RequestHeader("Authorization")String Token,@RequestBody RefreshRequest request);
+	public LoginResponse refreshToken(@RequestBody RefreshRequest request);
 	
 	/**
 	 * 

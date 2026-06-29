@@ -98,8 +98,8 @@ public class AuthServiceController {
 	
 	@PostMapping(value = "/refresh")
 	@Operation(summary = "User Logout", description = "Invalidates the user session and token.")
-	public ResponseEntity<LoginResponse> refresh(@RequestHeader("Authorization") String token, @RequestBody RefreshRequest request) {
-		return ResponseEntity.ok(authService.refresh(token, request));
+	public ResponseEntity<LoginResponse> refresh(@RequestBody RefreshRequest request) {
+		return ResponseEntity.ok(authService.refresh(request));
 	}
 
 	@PostMapping(value = "/password-reset", consumes = MediaType.APPLICATION_JSON_VALUE)

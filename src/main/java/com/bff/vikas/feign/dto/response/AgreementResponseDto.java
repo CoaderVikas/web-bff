@@ -29,6 +29,7 @@ public class AgreementResponseDto {
 	private String propertyId;
 	private String unitId;
 	private String ownerId;
+	private String paymentReferenceNumber;
 	private BigDecimal rentAmount;
 	private BigDecimal securityDeposit;
 	private BigDecimal advanceAmount;

@@ -29,31 +29,42 @@ public class FeignErrorDecoder implements ErrorDecoder {
 	public Exception decode(String methodKey, Response response) {
 		String originalBody = "";
 		try {
-			originalBody = Util.toString(response.body().asReader(StandardCharsets.UTF_8));
+			if (response.body() != null) { // ✅ null check
+				originalBody = Util.toString(response.body().asReader(StandardCharsets.UTF_8));
+			}
+
+			if (originalBody == null || originalBody.isBlank()) { 
+				return new BffServiceException(fallbackError(response, "Downstream service returned no error body"));
+			}
 
 			if (originalBody.startsWith("\"") && originalBody.endsWith("\"")) {
 				originalBody = originalBody.substring(1, originalBody.length() - 1).replace("\\\"", "\"");
 			}
 
 			ApiError apiError = mapper.readValue(originalBody, ApiError.class);
-
 			if (apiError.getStatus() <= 0)
 				apiError.setStatus(response.status());
 			if (apiError.getTimestamp() == null)
 				apiError.setTimestamp(LocalDateTime.now().toString());
-
+			if (apiError.getMessage() == null || apiError.getMessage().isBlank()) {
+				apiError.setMessage("Downstream error (status " + response.status() + ")");
+			}
 			return new BffServiceException(apiError);
 
 		} catch (Exception e) {
 			String cleanMessage = extractMessage(originalBody);
-
-			ApiError fallback = ApiError.builder().message(cleanMessage).status(response.status())
-					.timestamp(LocalDateTime.now().toString()).build();
-
-			return new BffServiceException(fallback);
+			if (cleanMessage == null || cleanMessage.isBlank()) {
+				cleanMessage = "Downstream error (status " + response.status() + ")";
+			}
+			return new BffServiceException(fallbackError(response, cleanMessage));
 		}
 	}
 
+	private ApiError fallbackError(Response response, String message) {
+		return ApiError.builder().message(message).status(response.status()).timestamp(LocalDateTime.now().toString())
+				.build();
+	}
+	
 	private String extractMessage(String body) {
 		try {
 			JsonNode node = mapper.readTree(body);

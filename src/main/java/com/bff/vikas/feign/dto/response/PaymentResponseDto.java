@@ -26,6 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentResponseDto {
+	private String paymentRequestId;
 	private String paymentId;
 	private String tenantId;
 	private String propertyId;

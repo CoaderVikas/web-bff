@@ -3,6 +3,7 @@ package com.bff.vikas.feign.dto.response;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,75 +29,75 @@ import lombok.NoArgsConstructor;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL) 
 public class PropertyResponseDTO implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-
 	// Core Identity & Reference Tokens
-	private Long id;
-	private String propertyId;
-	private String userId;
-	private String type;
+		private Long id;
+		private String propertyId;
+		private String userId;
+		private String type;
 
-	// Common Root Properties
-	private String propertyName;
-	private Integer floors;
+		// Common Root Properties
+		private String propertyName;
+		private Integer floors;
 
-	// Unified Address Coordinates
-	private String address;
-	private String addressLine;
-	private String address1;
-	private String address2;
-	private String area;
-	private String areaLocality;
-	private String city;
-	private String district;
-	private String state;
-	private String pincode;
+		// Unified Address Coordinates
+		private String address;
+		private String addressLine;
+		private String address1;
+		private String address2;
+		private String area;
+		private String areaLocality;
+		private String city;
+		private String district;
+		private String state;
+		private String pincode;
 
-	// Residential Metrics Layout
-	private String bhkConfig;
-	private String roomType;
-	private String furnishing;
-	private String floor;
+		// Residential Metrics Layout
+		private String bhkConfig;
+		private String roomType;
+		private String furnishing;
+		private String floor;
 
-	// Financial / Rental Precision Channels
-	private BigDecimal monthlyRent;
-	private BigDecimal securityDeposit;
+		// Financial / Rental Precision Channels
+		private BigDecimal monthlyRent;
+		private BigDecimal securityDeposit;
 
-	// Commercial Infrastructure Parameters
-	private String unitType;
-	private BigDecimal maintenanceCharges;
-	private String washroom;
-	private String parking;
-	private String plotArea;
+		// Commercial Infrastructure Parameters
+		private String unitType;
+		private BigDecimal maintenanceCharges;
+		private String washroom;
+		private String parking;
+		private String plotArea;
 
-	// Complex Building Specifications
-	private String buildingType;
-	private Boolean hasLift;
-	private Boolean hasParking;
-	private Boolean hasPowerBackup;
+		// Complex Building Specifications
+		private String buildingType;
+		private Boolean hasLift;
+		private Boolean hasParking;
+		private Boolean hasPowerBackup;
 
-	// Commercial Compliance Specs
-	private String gstin;
-	private String contactNumber;
+		// Commercial Compliance Specs
+		private String gstin;
+		private String contactNumber;
 
-	// Media Resource Endpoint
-	private String image;
+		// Media Resource Endpoint
+		private String image;
+		
+		@Builder.Default
+		private List<String> images = new ArrayList<>();
 
-	// Hierarchical Graph Datasets (For Complex: BUILDING, HOTEL, PG, etc.)
-	private List<FloorDto> floorsData;
+		// Hierarchical Graph Datasets (For Complex: BUILDING, HOTEL, PG, etc.)
+		private List<FloorDto> floorsData;
 
-	// Dynamic Meta Schemes Custom Node (For Type: OTHER)
-	private MetaConfigDto metaConfig;
-	private String customType;
+		// Dynamic Meta Schemes Custom Node (For Type: OTHER)
+		private MetaConfigDto metaConfig;
+		private String customType;
 
-	// Audit Logs / System Trace Artifacts
-	private String createdBy;
-	private LocalDateTime createdDate;
-	private String updatedBy;
-	private LocalDateTime updatedDate;
-	private Boolean isDeleted;
-	
-	// Open runtime metadata values payload mapping catch
-	private Map<String, Object> additionalFields;
+		// Audit Logs / System Trace Artifacts
+		private String createdBy;
+		private LocalDateTime createdDate;
+		private String updatedBy;
+		private LocalDateTime updatedDate;
+		private Boolean isDeleted;
+		
+		// Open runtime metadata values payload mapping catch
+		private Map<String, Object> additionalFields;
 }

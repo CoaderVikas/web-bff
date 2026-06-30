@@ -9,5 +9,5 @@ package com.bff.vikas.enums;
  */
 
 public enum PaymentStatus {
-	PENDING, PAID, OVERDUE
+	PENDING, PAID, OVERDUE,FAILED
 }

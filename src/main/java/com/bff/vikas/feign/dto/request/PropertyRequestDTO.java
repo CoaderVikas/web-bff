@@ -2,6 +2,7 @@ package com.bff.vikas.feign.dto.request;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,6 +76,8 @@ public class PropertyRequestDTO implements Serializable {
 
 	// Images
 	private String image;
+	@Builder.Default
+	private List<String> images = new ArrayList<>();
 
 	// Multi Unit
 	private List<FloorDto> floorsData;

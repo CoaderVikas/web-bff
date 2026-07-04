@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.Util;
 import feign.codec.ErrorDecoder;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Class : FeignErrorDecoder 
@@ -22,6 +23,7 @@ import feign.codec.ErrorDecoder;
  * Version : 1.0
  */
 @Component
+@Slf4j
 public class FeignErrorDecoder implements ErrorDecoder {
 	private final ObjectMapper mapper = new ObjectMapper();
 
@@ -29,36 +31,34 @@ public class FeignErrorDecoder implements ErrorDecoder {
 	public Exception decode(String methodKey, Response response) {
 		String originalBody = "";
 		try {
-			if (response.body() != null) { // ✅ null check
+			if (response.body() != null) {
 				originalBody = Util.toString(response.body().asReader(StandardCharsets.UTF_8));
+			} else {
+				log.warn("[{}] status={} reason={} - empty body from downstream", methodKey, response.status(),
+						response.reason());
 			}
-
-			if (originalBody == null || originalBody.isBlank()) { 
-				return new BffServiceException(fallbackError(response, "Downstream service returned no error body"));
-			}
-
 			if (originalBody.startsWith("\"") && originalBody.endsWith("\"")) {
 				originalBody = originalBody.substring(1, originalBody.length() - 1).replace("\\\"", "\"");
 			}
-
 			ApiError apiError = mapper.readValue(originalBody, ApiError.class);
 			if (apiError.getStatus() <= 0)
 				apiError.setStatus(response.status());
 			if (apiError.getTimestamp() == null)
 				apiError.setTimestamp(LocalDateTime.now().toString());
-			if (apiError.getMessage() == null || apiError.getMessage().isBlank()) {
-				apiError.setMessage("Downstream error (status " + response.status() + ")");
-			}
 			return new BffServiceException(apiError);
-
 		} catch (Exception e) {
+			log.error("[{}] Failed to decode feign error | status={} | body='{}'", methodKey, response.status(),
+					originalBody, e);
 			String cleanMessage = extractMessage(originalBody);
-			if (cleanMessage == null || cleanMessage.isBlank()) {
-				cleanMessage = "Downstream error (status " + response.status() + ")";
-			}
-			return new BffServiceException(fallbackError(response, cleanMessage));
+			ApiError fallback = ApiError.builder()
+					.message(cleanMessage.isEmpty()
+							? "No response body from downstream service (status " + response.status() + ")"
+							: cleanMessage)
+					.status(response.status()).timestamp(LocalDateTime.now().toString()).build();
+			return new BffServiceException(fallback);
 		}
 	}
+
 
 	private ApiError fallbackError(Response response, String message) {
 		return ApiError.builder().message(message).status(response.status()).timestamp(LocalDateTime.now().toString())

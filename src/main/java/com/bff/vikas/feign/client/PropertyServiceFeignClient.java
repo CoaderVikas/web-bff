@@ -58,4 +58,7 @@ public interface PropertyServiceFeignClient {
 
 	@PutMapping("/{propertyId}/allocate-property")
 	ResponseEntity<?> syncPropertyOccupancy(@PathVariable("propertyId") String propertyId,@RequestBody PropertyUpdateRequestDTO request);
+	
+	@GetMapping("/all")
+	public List<PropertyResponseDTO> findAllProperties();
 }

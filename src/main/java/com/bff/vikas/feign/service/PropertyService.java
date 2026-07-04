@@ -79,6 +79,11 @@ public class PropertyService {
 		log.info("Calling Property Service: checkPropertyExists | id={}", id);
 		return feignClient.checkPropertyExists(id).getBody();
 	}
+	
+	public  List<PropertyResponseDTO> findAllProperties(){
+		log.info("Calling Property Service: to fetch all properties ");
+		return feignClient.findAllProperties();
+	}
 
 	public ResponseEntity<?> syncPropertyOccupancy(String id, PropertyUpdateRequestDTO request) {
 		log.info("Calling Property Service: syncPropertyOccupancy | id={}", id);

@@ -24,20 +24,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentRequestDto {
-	private String paymentRequestId;
-	private String tenantId;
-	private String propertyId;
-	private String unitId;
-	private PaymentType paymentType;
-	private String month;
+	// private BigDecimal advanceAmount;
+	// private String paymentFor;
 	private BigDecimal amount;
-	private BigDecimal securityDeposit;
-	private BigDecimal advanceAmount;
-	private LocalDate dueDate;
-	private PaymentMode paymentMode;
-	private String paymentFor;
-	private LocalDate leaseStartDate;
-	private LocalDate leaseEndDate;
-	private String dueDayOfMonth;
+	private Integer bedSerialNo;
 	private String collectedBy;
+	private LocalDate dueDate;
+	private Integer dueDayOfMonth;
+	private LocalDate leaseEndDate;
+	private LocalDate leaseStartDate;
+	private String month;
+	private LocalDate paymentDate;//
+	private PaymentMode paymentMode;
+	private String paymentRequestId;
+	private PaymentType paymentType;
+	private String propertyId;
+	private BigDecimal rentAmount;
+	private BigDecimal securityDeposit;
+	private String tenantId;
+	private String unitId;
 }

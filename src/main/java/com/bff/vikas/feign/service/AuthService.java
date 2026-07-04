@@ -166,6 +166,10 @@ public class AuthService {
 		return feignClient.getUserImage();
 	}
 	
+	public Resource getProfileImagebyUserName(String username) {
+		return feignClient.getUserImageByUserId(username);
+	}
+	
 	public GoogleAuthResponse googleAuth(GoogleAuthRequest request) {
 	    log.info("Processing Google auth in BFF layer");
 	    return feignClient.googleAuth(request);

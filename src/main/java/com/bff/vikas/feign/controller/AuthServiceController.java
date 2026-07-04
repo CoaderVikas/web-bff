@@ -192,6 +192,19 @@ public class AuthServiceController {
 		return ResponseEntity.ok(profileImage);
 	}
 	
+	@Operation(summary = "Update Profile", description = "Updates the profile information for the authenticated user.")
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "Profile updated successfully"),
+		@ApiResponse(responseCode = "400", description = "Invalid request data"),
+		@ApiResponse(responseCode = "401", description = "Unauthorized")
+	})
+	
+	@GetMapping(value = "/getImage/{username}")
+	public ResponseEntity<Resource> updateProfileImageByUserName(@PathVariable("username")String username) {
+		Resource profileImage = authService.getProfileImagebyUserName(username);
+		return ResponseEntity.ok(profileImage);
+	}
+	
 	@PostMapping(value = "/google", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Operation(summary = "Google OAuth Login", description = "Authenticates user via Google ID token and returns JWT.")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "Google authentication successful"),

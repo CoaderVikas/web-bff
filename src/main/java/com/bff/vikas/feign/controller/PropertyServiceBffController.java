@@ -101,6 +101,14 @@ public class PropertyServiceBffController {
 		log.info("BFF: Get My Properties");
 		return ResponseEntity.ok(propertyService.getMyProperties());
 	}
+	
+	
+	@GetMapping("/all")
+	@Operation(summary = "Get All Properties", description = "Returns properties owned by the current session user.")
+	public ResponseEntity<List<PropertyResponseDTO>> findAllProperties() {
+		log.info("BFF: Get All Properties");
+		return ResponseEntity.ok(propertyService.findAllProperties());
+	}
 
 	@GetMapping("/{id}/exists")
 	@Operation(summary = "Check Property Exists", description = "Checks whether a property exists by ID.")
@@ -117,4 +125,6 @@ public class PropertyServiceBffController {
 		log.info("BFF: Allocate/Vacate Property | id={}", id);
 		return propertyService.syncPropertyOccupancy(id, request);
 	}
+	
+	
 }

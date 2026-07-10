@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -28,7 +29,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class PropertyRequestDTO implements Serializable {
 	private String type;
 
@@ -96,5 +96,10 @@ public class PropertyRequestDTO implements Serializable {
 			this.additionalFields = new HashMap<>();
 		}
 		this.additionalFields.put(key, value);
+	}
+	
+	@JsonAnyGetter
+	public Map<String, Object> getAdditionalFields() {
+	    return additionalFields;
 	}
 }

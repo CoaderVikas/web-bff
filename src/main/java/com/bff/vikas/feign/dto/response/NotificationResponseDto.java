@@ -27,6 +27,7 @@ public class NotificationResponseDto {
 	private Room room;         // sirf BOOKING ke liye
 	private String message;    // sirf CHAT ke liye
 	private String createdAt;  // ISO string
+	private boolean read;
 
 	@Data
 	@Builder

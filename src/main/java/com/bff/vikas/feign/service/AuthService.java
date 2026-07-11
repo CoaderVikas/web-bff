@@ -9,6 +9,8 @@ import com.bff.vikas.feign.client.AuthServiceFeignClient;
 import com.bff.vikas.feign.dto.request.ChangePasswordRequest;
 import com.bff.vikas.feign.dto.request.GoogleAuthRequest;
 import com.bff.vikas.feign.dto.request.LoginRequest;
+import com.bff.vikas.feign.dto.request.PhoneLoginRequestDto;
+import com.bff.vikas.feign.dto.request.PhoneResetRequestDto;
 import com.bff.vikas.feign.dto.request.RefreshRequest;
 import com.bff.vikas.feign.dto.request.RegisterRequest;
 import com.bff.vikas.feign.dto.request.UpdateProfileRequest;
@@ -173,5 +175,22 @@ public class AuthService {
 	public GoogleAuthResponse googleAuth(GoogleAuthRequest request) {
 	    log.info("Processing Google auth in BFF layer");
 	    return feignClient.googleAuth(request);
+	}
+
+	/**
+	 * @param request
+	 * @return
+	 */
+	public LoginResponse phoneLoginOtp(PhoneLoginRequestDto request) {
+		// TODO Auto-generated method stub
+		return feignClient.phoneLoginOtp(request);
+	}
+
+	/**
+	 * @param request
+	 * @return
+	 */
+	public PasswordResetResponse phoneReset(PhoneResetRequestDto request) {
+		return feignClient.phoneReset(request);
 	}
 }

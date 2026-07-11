@@ -18,6 +18,8 @@ import com.bff.vikas.config.FeignConfig;
 import com.bff.vikas.feign.dto.request.ChangePasswordRequest;
 import com.bff.vikas.feign.dto.request.GoogleAuthRequest;
 import com.bff.vikas.feign.dto.request.LoginRequest;
+import com.bff.vikas.feign.dto.request.PhoneLoginRequestDto;
+import com.bff.vikas.feign.dto.request.PhoneResetRequestDto;
 import com.bff.vikas.feign.dto.request.RefreshRequest;
 import com.bff.vikas.feign.dto.request.RegisterRequest;
 import com.bff.vikas.feign.dto.request.UpdateProfileRequest;
@@ -187,4 +189,10 @@ public interface AuthServiceFeignClient {
 	
 	@PostMapping("/auth/google")
 	GoogleAuthResponse googleAuth(@RequestBody GoogleAuthRequest request);
+	
+    @PostMapping(value = "/phone/login-otp", consumes = MediaType.APPLICATION_JSON_VALUE)
+    LoginResponse phoneLoginOtp(@RequestBody PhoneLoginRequestDto request);
+
+    @PostMapping(value = "/phone/reset", consumes = MediaType.APPLICATION_JSON_VALUE)
+    PasswordResetResponse phoneReset(@RequestBody PhoneResetRequestDto request);
 }

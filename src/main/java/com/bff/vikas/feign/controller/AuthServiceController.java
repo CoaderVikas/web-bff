@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.bff.vikas.feign.dto.request.ChangePasswordRequest;
 import com.bff.vikas.feign.dto.request.GoogleAuthRequest;
 import com.bff.vikas.feign.dto.request.LoginRequest;
+import com.bff.vikas.feign.dto.request.PhoneLoginRequestDto;
+import com.bff.vikas.feign.dto.request.PhoneResetRequestDto;
 import com.bff.vikas.feign.dto.request.RefreshRequest;
 import com.bff.vikas.feign.dto.request.RegisterRequest;
 import com.bff.vikas.feign.dto.request.UpdateProfileRequest;
@@ -218,5 +220,20 @@ public class AuthServiceController {
 			log.error("Google auth failed: {}", e.getMessage());
 			return ResponseEntity.status(401).body("Google authentication failed: " + e.getMessage());
 		}
+	}
+	
+
+	@Operation(summary = "Passwordless Phone Login")
+	@PostMapping("/login-otp")
+	public ResponseEntity<LoginResponse> loginOtp(@RequestBody PhoneLoginRequestDto request) {
+		log.info("BFF: phone OTP login (token present: {})", request.getFirebaseIdToken() != null);
+		return ResponseEntity.ok(authService.phoneLoginOtp(request));
+	}
+
+	@Operation(summary = "Phone-based Password Reset")
+	@PostMapping("/reset")
+	public ResponseEntity<PasswordResetResponse> reset(@RequestBody PhoneResetRequestDto request) {
+		log.info("BFF: phone password reset (token present: {})", request.getFirebaseIdToken() != null);
+		return ResponseEntity.ok(authService.phoneReset(request));
 	}
 }

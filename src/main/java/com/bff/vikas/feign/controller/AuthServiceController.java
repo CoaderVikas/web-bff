@@ -236,4 +236,11 @@ public class AuthServiceController {
 		log.info("BFF: phone password reset (token present: {})", request.getFirebaseIdToken() != null);
 		return ResponseEntity.ok(authService.phoneReset(request));
 	}
+	
+	@Operation(summary = "Verify Phone for Logged-in User")
+	@PostMapping("/verify")
+	public ResponseEntity<PasswordResetResponse> verifyMyPhone(@RequestBody PhoneLoginRequestDto request) {
+		log.info("BFF: phone password reset (token present: {})", request.getFirebaseIdToken() != null);
+		return ResponseEntity.ok(authService.phoneNumberVerify(request));
+	}
 }

@@ -1,5 +1,6 @@
 package com.bff.vikas.feign.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -12,5 +13,6 @@ import lombok.Data;
 
 @Data
 public class PhoneLoginRequestDto {
+	@NotBlank(message = "Firebase Token is required")
     private String firebaseIdToken;
 }

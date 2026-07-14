@@ -25,27 +25,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserProfileResponse {
-	// Identity
 	private String fullName;
 	private String username;
 	private String email;
-
-	// Authorization
+	private String phone;
+	private boolean phoneVerified;
 	private String role;
-
-	// Account status
 	private Boolean enabled;
-	 private String photoUrl;
+	private String photoUrl;
 	private Boolean accountNonLocked;
-	
-	//for status
 	private String status;
-	
-	// Security info (optional / internal use)
 	@JsonIgnore
 	private Integer failedLoginAttempts;
 	@JsonIgnore
 	private LocalDateTime passwordLastUpdatedAt;
-	
 	private String message;
 }

@@ -193,4 +193,12 @@ public class AuthService {
 	public PasswordResetResponse phoneReset(PhoneResetRequestDto request) {
 		return feignClient.phoneReset(request);
 	}
+
+	/**
+	 * @param request
+	 * @return
+	 */
+	public PasswordResetResponse phoneNumberVerify(PhoneLoginRequestDto request) {
+		return feignClient.verifyMyPhone(request);
+	}
 }

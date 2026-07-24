@@ -80,8 +80,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		logger.info("*********** Token name - name: {} ***********", name);
 
 		// 6️⃣ Set authorities
-		List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role.trim()));
-		logger.info("*********** Granted Authorities: {} ***********", authorities);
+		List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role.trim()));
 
 		// 7️⃣ Set authentication in SecurityContext
 		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null,
